@@ -16,6 +16,7 @@
       <link rel="stylesheet" href="css/bootstrap.min.css">
       <!-- style css -->
       <link rel="stylesheet" href="css/style.css">
+      <link rel="stylesheet" href="style.css">
       <!-- Responsive-->
       <link rel="stylesheet" href="css/responsive.css">
       <link rel="stylesheet" href="css/owl.carousel.min.css">
@@ -26,6 +27,9 @@
       <!-- Tweaks for older IEs-->
       <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.5/dist/sweetalert2.min.css">
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.5/dist/sweetalert2.min.js"></script>
+      
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
@@ -154,23 +158,61 @@
             </div>
             <div class="row">
                <div class="col-md-8 offset-md-2">
-                  <form action="correo.php" method="POST" id="miFormulario" class="contact_form" enctype="multipart/form-data">
-                     <div class="row">
-                         <div class="col-md-12">
-                             <input type="text" class="contact_control" placeholder="Name" name="name" required="">
-                         </div>
-                         <div class="col-md-12">
-                             <input type="email" class="contact_control" placeholder="Email" name="email" required="">
-                         </div>
-                         <div class="col-md-12">
-                             <textarea class="textarea" placeholder="Message" rows="5" id="comment" name="msg" required=""></textarea>
-                         </div>
-                       
-                         <div class="col-md-12">
-                             <button class="send_btn" type="submit">Enviar</button>
-                         </div>
+                 <form id="contact-form" class="contact_form" enctype="multipart/form-data">
+                  <div class="row">
+                     <div class="col-md-12">
+                     <input type="text" class="contact_control" name="name" placeholder="Namee" required>
                      </div>
-                 </form>
+                     <div class="col-md-12">
+                     <input type="email" class="contact_control" name="email" placeholder="Email" required>
+                     </div>
+                     <div class="col-md-12">
+                     <textarea class="textarea" name="message" placeholder="Message" rows="5" id="comment" required></textarea>
+                     </div>
+                     <div class="col-md-12">
+                     <button class="send_btn" type="button" onclick="submitForm()">Send Message</button>
+                     </div>
+                  </div>
+               </form>
+               
+               <script>
+                  function submitForm() {
+                     const name = document.getElementById("contact-form").name.value;
+                     const email = document.getElementById("contact-form").email.value;
+                     const message = document.getElementById("contact-form").message.value;
+                 
+                     const xhr = new XMLHttpRequest();
+                     xhr.open("POST", "enviar.php");
+                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                     xhr.onload = function() {
+                         if (xhr.status === 200) {
+                             // Show success message with SweetAlert2
+                             Swal.fire({
+                                 title: "¡Mensaje enviado!",
+                                 text: "Gracias por ponerte en contacto. Nos pondremos en contacto contigo pronto.",
+                                 icon: "success",
+                                 confirmButtonText: "Cerrar",
+                             });
+                 
+                             // Clear form fields
+                             document.getElementById("contact-form").reset();
+                         } else {
+                             // Show error message with SweetAlert2 (optional)
+                             // You can implement an error message here
+                         }
+                     };
+                     xhr.send(`name=${name}&email=${email}&message=${message}`);
+                 }
+                 
+               </script>
+
+               <!--div id="modal-container" class="hidden">
+                  <div id="modal">
+                      <h2>¡Mensaje enviado!</h2>
+                      <p>Gracias por ponerte en contacto. Nos pondremos en contacto contigo pronto.</p>
+                      <button type="button" onclick="closeModal()">Cerrar</button>
+                  </div>
+              </div-->
                   </div>
                </div>
             </div>
